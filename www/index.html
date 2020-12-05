@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Module Test</title>
+  <style type="text/css">
+    .hidden {
+      display: none;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 120px;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <textarea id="data-source"></textarea><br />
+    <textarea id="data-result"></textarea><br />
+    <button id="button-run">运行</button>
+  </div>
+  <hr />
+  <script>
+    function $(el) {
+      return document.querySelector(el);
+    }
+  </script>
+  <script type="module">
+    var run = function () {
+      let result;
+      let w = wasm;
+      let filename = 'program.c';
+      w.ccall('save_file', null, ['string', 'string'], [filename, $("#data-source").value]);
+      // result = w.ccall("get_file", 'string', ["string"], [filename]);
+      // console.log("file content:", result);
+      result = w.ccall('process', // name of C function 
+        'number',                 // return type
+        ['string'],                 // argument types
+        ["program.c"]);                // arguments
+      console.log('result', result);
+      // alert(`result: ${result}`);
+      result = w.ccall("get_out_", 'string', [null], null);
+      console.log("prints:", result);
+      $("#data-result").value = result;
+    };
+    import Module from './c4-wasm.js';
+    // var wasm = null;
+    $("#data-source").value = '#include <stdio.h>\nint main() {\n    printf("hello, world; hello, wasm!\\n");\n    return 0;\n}';
+    Module().then(w => {
+      // wasm = w;
+      window['wasm'] = w
+      console.log('wasm', w);
+      return w;
+    }).then((w) => {
+      $('#button-run').addEventListener('click', run);
+    }).then(() => {
+      setTimeout(() => {
+        run();
+      }, 200);
+    })
+  </script>
+  <!-- <script src="./c4-wasm.js"></script> -->
+</body>
+
+</html>

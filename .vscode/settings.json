@@ -1,0 +1,7 @@
+{
+  "files.associations": {
+    "xlocale": "c",
+    "xlocnum": "c",
+    "istream": "c"
+  }
+}

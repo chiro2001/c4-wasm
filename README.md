@@ -1,5 +1,4 @@
-c4 - C in four functions
-========================
+## c4 - C in four functions
 
 An exercise in minimalism.
 
@@ -12,3 +11,6 @@ Try the following:
     ./c4 c4.c hello.c
     ./c4 c4.c c4.c hello.c
 
+## c4-wasm
+
+小编译器c4的wasm封装。尝试在浏览器解释运行C代码。
