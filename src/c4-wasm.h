@@ -14,11 +14,11 @@
 // int process(int argc, char **argv);
 
 extern EFILE *_out_;
-#define printf(str, ...)                                       \
-  do {                                                         \
-    sprintf(_efiles_buf_, str, __VA_ARGS__);                   \
-    if (!_out_) break;                                         \
-    efwrite(_efiles_buf_, strlen(_efiles_buf_) + 1, 1, _out_); \
+#define printf(str, ...)                                   \
+  do {                                                     \
+    sprintf(_efiles_buf_, str, __VA_ARGS__);               \
+    if (!_out_) break;                                     \
+    efwrite(_efiles_buf_, strlen(_efiles_buf_), 1, _out_); \
   } while (0)
 
 #define putstring(str) printf("%s", str)

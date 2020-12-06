@@ -1,5 +1,11 @@
 #include <stdio.h>
-main() {
-  printf("hello, world\n");
+int main() {
+  int i;
+  i = 1000;
+  while (i) {
+    printf("%d ", i);
+    i--;
+  }
+  printf("\n");
   return 0;
 }

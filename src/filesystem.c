@@ -40,7 +40,10 @@ char *get_file(char *filename) {
   // 不要读取太多次...这里貌似没法free
   char *data = (char *)malloc(sizeof(char) * size);
   char *p = data;
-  while ((c = efgetchar(reader)) >= 0) *(p++) = c == '\0' ? '\n' : c;
+  while ((c = efgetchar(reader)) >= 0) {
+    if (c == 0) continue;
+    *(p++) = c;
+  }
   // while ((c = efgetchar(reader)) >= 0) *(p++) = c;
   *p = 0;
   efclose(reader);
@@ -51,10 +54,12 @@ char *get_file(char *filename) {
 EMSCRIPTEN_KEEPALIVE
 char *get_out_() {
   // efiles_init();
+  int c = 0;
+  efiles_write(_out_, &c, sizeof(char));
   efclose(_out_);
   char *data = get_file("_out_");
-  puts("_out_:");
-  puts(data);
+  // puts("_out_:");
+  // puts(data);
   // _out_ = efopen("_out_", "r");
   // efiles_delete(_out_);
   // efiles_delete("_out_");

@@ -4278,18 +4278,6 @@ var ASM_CONSTS = {
   }
   }
 
-  function _fd_write(fd, iov, iovcnt, pnum) {try {
-  
-      var stream = SYSCALLS.getStreamFromFD(fd);
-      var num = SYSCALLS.doWritev(stream, iov, iovcnt);
-      HEAP32[((pnum)>>2)]=num
-      return 0;
-    } catch (e) {
-    if (typeof FS === 'undefined' || !(e instanceof FS.ErrnoError)) abort(e);
-    return e.errno;
-  }
-  }
-
   function _setTempRet0($i) {
       setTempRet0(($i) | 0);
     }
@@ -4378,7 +4366,6 @@ var asmLibraryArg = {
   "exit": _exit,
   "fd_close": _fd_close,
   "fd_read": _fd_read,
-  "fd_write": _fd_write,
   "memory": wasmMemory,
   "setTempRet0": _setTempRet0
 };
@@ -4433,9 +4420,6 @@ var _emscripten_stack_get_free = Module["_emscripten_stack_get_free"] = function
 var _emscripten_stack_get_end = Module["_emscripten_stack_get_end"] = function() {
   return (_emscripten_stack_get_end = Module["_emscripten_stack_get_end"] = Module["asm"]["emscripten_stack_get_end"]).apply(null, arguments);
 };
-
-/** @type {function(...*):?} */
-var dynCall_jiji = Module["dynCall_jiji"] = createExportWrapper("dynCall_jiji");
 
 
 

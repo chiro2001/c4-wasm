@@ -37,11 +37,16 @@
       w.ccall('save_file', null, ['string', 'string'], [filename, $("#data-source").value]);
       // result = w.ccall("get_file", 'string', ["string"], [filename]);
       // console.log("file content:", result);
+      try {
       result = w.ccall('process', // name of C function 
         'number',                 // return type
         ['string'],                 // argument types
         ["program.c"]);                // arguments
       console.log('result', result);
+      } catch(err) {
+        alert('执行错误: ' + err);
+        console.error(err);
+      }
       // alert(`result: ${result}`);
       result = w.ccall("get_out_", 'string', [null], null);
       console.log("prints:", result);
