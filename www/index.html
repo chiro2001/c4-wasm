@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <title>Module Test</title>
+  <title>Mini IDE</title>
   <style type="text/css">
     .hidden {
       display: none;
@@ -14,14 +14,27 @@
       width: 100%;
       min-height: 120px;
     }
+
+    button {
+      width: 100%;
+    }
   </style>
 </head>
 
 <body>
+  <h3>Mini IDE</h3>
   <div>
     <textarea id="data-source"></textarea><br />
+    <hr />
     <textarea id="data-result"></textarea><br />
     <button id="button-run">运行</button>
+  </div>
+  <hr />
+  <div>
+    <b>说明</b>：本程序移植了<a href="https://github.com/rswier/c4">c4</a>做为解析程序，能够直接解析运行C语言代码。目前仅支持printf输出，不支持scanf输入、文件操作和引入头文件等。请仅仅在函数头声明局部变量，而且切勿运行死循环程序。
+  </div>
+  <div>
+    <b>版权信息</b>：<a href="https://gitee.com/chiro2001/c4-wasm">c4-wasm</a>，MIT协议。代码编辑和展示使用<a href="https://codemirror.net/">CodeMirror</a>。
   </div>
   <hr />
   <script>
@@ -34,7 +47,8 @@
       let result;
       let w = wasm;
       let filename = 'program.c';
-      w.ccall('save_file', null, ['string', 'string'], [filename, $("#data-source").value]);
+      // w.ccall('save_file', null, ['string', 'string'], [filename, $("#data-source").value]);
+      w.ccall('save_file', null, ['string', 'string'], [filename, myCodeMirror.getValue()]);
       // result = w.ccall("get_file", 'string', ["string"], [filename]);
       // console.log("file content:", result);
       try {
@@ -54,7 +68,7 @@
     };
     import Module from './c4-wasm.js';
     // var wasm = null;
-    $("#data-source").value = '#include <stdio.h>\nint main() {\n    printf("hello, world; hello, wasm!\\n");\n    return 0;\n}';
+    // $("#data-source").value = '#include <stdio.h>\nint main() {\n    printf("hello, world; hello, wasm!\\n");\n    return 0;\n}';
     Module().then(w => {
       // wasm = w;
       window['wasm'] = w
@@ -67,6 +81,17 @@
         run();
       }, 200);
     })
+  </script>
+  <script src="lib/codemirror.js"></script>
+  <link rel="stylesheet" href="lib/codemirror.css">
+  <script src="mode/clike/clike.js"></script>
+  <script>
+    var myCodeMirror = CodeMirror.fromTextArea($("#data-source"), {
+      lineNumbers: true,
+      mode: "text/x-csrc",
+      matchBrackets: true,
+    });
+    myCodeMirror.setValue('#include <stdio.h>\nint main() {\n  printf("hello, world; hello, wasm!\\n");\n  return 0;\n}')
   </script>
   <!-- <script src="./c4-wasm.js"></script> -->
 </body>
